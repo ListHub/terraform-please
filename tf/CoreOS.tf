@@ -3,8 +3,15 @@ variable "subnet_id" {}
 variable "vpc_id" {}
 variable "access_key" {}
 variable "secret_key" {}
+variable "aws_key_name" {}
+variable "inbound_cidr" {
+  default = "0.0.0.0/0"
+}
 variable "aws_region" {
     default = "us-east-1"
+}
+variable "count" {
+  default = 3
 }
 
 # CoreOS Stable Channel
@@ -64,6 +71,7 @@ resource "aws_security_group" "coreos-test" {
 
 resource "aws_instance" "docker_host" {
   instance_type = "t2.micro"
+  key_name = "${var.aws_key_name}"
   ami = "${lookup(var.aws_amis, var.aws_region)}"
   count = "${var.count}"
   key_name = "${var.aws_key_name}"
